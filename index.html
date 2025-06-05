@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ran the Champ</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      padding: 2em;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #1a237e;
+    }
+    .feed-category {
+      margin-top: 2em;
+    }
+    .feed-category h2 {
+      font-size: 1.4em;
+      border-bottom: 2px solid #1a237e;
+      padding-bottom: 0.3em;
+    }
+    .feed-item {
+      background-color: #fff;
+      padding: 1em;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1em;
+    }
+    .feed-item a {
+      color: #0d47a1;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .feed-item time {
+      display: block;
+      font-size: 0.85em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ran the Champ</h1>
+
+  <div class="feed-category">
+    <h2>ריבית והחלטות פדרל ריזרב</h2>
+    <!-- פריטים מהפיד ייכנסו כאן -->
+  </div>
+
+  <div class="feed-category">
+    <h2>מט"ח - שקל מול דולר/יורו</h2>
+  </div>
+
+  <div class="feed-category">
+    <h2>אינפלציה ומדד המחירים לצרכן</h2>
+  </div>
+
+  <div class="feed-category">
+    <h2>מדדי מניות ואג"ח</h2>
+  </div>
+
+  <div class="feed-category">
+    <h2>דירוגי אשראי והצהרות כלכליות</h2>
+  </div>
+
+  <script>
+    const feedUrl = "https://www.inoreader.com/stream/user/1003991620/tag/%D7%A4%D7%99%D7%A0%D7%A0%D7%A1%D7%99%D7%9D%20%D7%9E%D7%9E%D7%95%D7%A7%D7%93%D7%99%D7%9D?type=rss";
+
+    async function loadRSS() {
+      const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}`);
+      const data = await response.json();
+      if (data.status === 'ok') {
+        data.items.forEach(item => {
+          const container = document.querySelector('.feed-category');
+          const article = document.createElement('div');
+          article.className = 'feed-item';
+          article.innerHTML = `
+            <a href="${item.link}" target="_blank">${item.title}</a>
+            <time>${new Date(item.pubDate).toLocaleDateString('he-IL')}</time>
+            <p>${item.description}</p>
+          `;
+          container.appendChild(article);
+        });
+      }
+    }
+
+    loadRSS();
+  </script>
+</body>
+</html>
